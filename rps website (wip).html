@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rock Paper Scissors</title>
+  <style>
+    /* Add your CSS styles here */
+    .result-container {
+      margin-top: 20px;
+    }
+    /* New CSS styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+    }
+    #mode-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+    #button-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .btn {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 0 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    #result-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+    #result {
+      margin-bottom: 10px;
+    }
+    #play-again-btn {
+      font-size: 18px;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    #play-again-btn:hover {
+      background-color: #1c7430;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rock Paper Scissors</h1>
+  <div id="mode-container">
+    <label for="mode-select">Mode:</label>
+    <select id="mode-select">
+      <option value="player">Player vs. Player</option>
+      <option value="computer">Player vs. Computer</option>
+      <option value="computer-computer">Computer vs. Computer</option>
+    </select>
+  </div>
+  <div id="button-container">
+    <button class="btn" id="rock">Rock</button>
+    <button class="btn" id="paper">Paper</button>
+    <button class="btn" id="scissors">Scissors</button>
+  </div>
+  <div id="result-container">
+    <div id="result"></div>
+    <button id="play-again-btn" style="display: none;">Play Again</button>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll(".btn");
+    let player1Choice = "";
+    let player2Choice = "";
+    const modeSelect = document.getElementById("mode-select");
+    let mode = modeSelect.value;
+
+    modeSelect.addEventListener("change", () => {
+      mode = modeSelect.value;
+      resetGame();
+    });
+
+    buttons.forEach(button => {
+      button.addEventListener("click", event => {
+        if (mode === "player") {
+          if (!player1Choice) {
+            player1Choice = event.target.id;
+            document.getElementById("result").innerText = "Player 1 chose: " + player1Choice;
+          } else if (!player2Choice) {
+            player2Choice = event.target.id;
+            document.getElementById("result").innerText += "\nPlayer 2 chose: " + player2Choice;
+            document.getElementById("play-again-btn").style.display = "block";
+            determineWinner(player1Choice, player2Choice);
+          }
+        } else if (mode === "computer") {
+          if (!player1Choice) {
+            player1Choice = event.target.id;
+            document.getElementById("result").innerText = "Player chose: " + player1Choice;
+            document.getElementById("result").innerText += "\nComputer chose: " + getComputerChoice();
+            document.getElementById("play-again-btn").style.display = "block";
+            determineWinner(player1Choice, getComputerChoice());
+          }
+        } else if (mode === "computer-computer") {
+          if (!player1Choice) {
+            player1Choice = getRandomChoice();
+            document.getElementById("result").innerText = "Computer 1 chose: " + player1Choice;
+          } else if (!player2Choice) {
+            player2Choice = getRandomChoice();
+            document.getElementById("result").innerText += "\nComputer 2 chose: " + player2Choice;
+            document.getElementById("play-again-btn").style.display = "block";
+            determineWinner(player1Choice, player2Choice);
+          }
+        }
+      });
+    });
+
+    document.getElementById("play-again-btn").addEventListener("click", () => {
+      resetGame();
+    });
+
+    function resetGame() {
+      player1Choice = "";
+      player2Choice = "";
+      document.getElementById("result").innerText = "";
+      document.getElementById("play-again-btn").style.display = "none";
+    }
+
+    function getComputerChoice() {
+      const choices = ["rock", "paper", "scissors"];
+      return choices[Math.floor(Math.random() * choices.length)];
+    }
+
+    function getRandomChoice() {
+      const choices = ["rock", "paper", "scissors"];
+      return choices[Math.floor(Math.random() * choices.length)];
+    }
+
+    function determineWinner(player1, player2) {
+      if (player1 === player2) {
+        document.getElementById("result").innerText += "\nIt's a tie!";
+      } else if (
+        (player1 === "rock" && player2 === "scissors") ||
+        (player1 === "paper" && player2 === "rock") ||
+        (player1 === "scissors" && player2 === "paper")
+      ) {
+        document.getElementById("result").innerText += "\nPlayer 1 wins!";
+      } else {
+        document.getElementById("result").innerText += "\nPlayer 2 wins!";
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+
